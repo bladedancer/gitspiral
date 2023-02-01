@@ -1,0 +1,81 @@
+:root {
+    --controls-background-color: #fff;
+    --controls-background-color-hover: rgba(0, 0, 0, 0.2);
+    --controls-border-color: rgba(0, 0, 0, 0.2);
+    --controls-color: #000;
+    --controls-zindex: 100;
+    --controls-margin: 5px;
+    --controls-size: 32px;
+}
+
+/**
+   * controls wrapper
+   */
+.react-controls {
+    position: absolute;
+    z-index: var(--controls-zindex);
+    border: 2px solid var(--controls-border-color);
+    border-radius: 4px;
+    color: var(--controls-color);
+    background-color: var(--controls-background-color);
+}
+
+.react-controls.bottom-right {
+    bottom: var(--controls-margin);
+    right: var(--controls-margin);
+}
+
+.react-controls.bottom-left {
+    bottom: var(--controls-margin);
+    left: var(--controls-margin);
+}
+
+.react-controls.top-right {
+    top: var(--controls-margin);
+    right: var(--controls-margin);
+}
+
+.react-controls.top-left {
+    top: var(--controls-margin);
+    left: var(--controls-margin);
+}
+
+.react-controls:first-child {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.react-controls:last-child {
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+/**
+   * control button
+   */
+.react-control {
+    width: var(--controls-size);
+    height: var(--controls-size);
+    line-height: var(--controls-size);
+    background-color: var(--controls-background-color);
+    border-bottom: 1px solid var(--controls-border-color);
+}
+
+.react-control>button {
+    display: block;
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: var(--controls-size);
+    height: var(--controls-size);
+    line-height: var(--controls-size);
+    background-position: center;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-color: var(--controls-background-color);
+    clip: rect(0, 0, 0, 0);
+}
+
+.react-control>button:hover {
+    background-color: var(--controls-background-color-hover);
+}

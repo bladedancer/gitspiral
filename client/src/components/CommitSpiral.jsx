@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
 import * as d3 from "d3";
 import { useCommitsContext } from "./hooks/useCommits";
+import useWindowDimensions from './hooks/useWindowDimensions';
 
 const defaults = {
   width: 400,
@@ -237,15 +238,12 @@ const CommitSpiral = ({ config, children }) => {
   const svgRef = useRef(null);
   const [counts, setCounts] = useState({});
   const { commits, setCommits } = useCommitsContext();
+  const { width, height } = useWindowDimensions();
 
   config = {
     ...defaults,
     ...config
   }
-
-  const { width, height, margin } = config;
-  const svgWidth = width + margin.left + margin.right;
-  const svgHeight = height + margin.top + margin.bottom;
 
   useEffect(async () => {
     setCounts(commits.counts);
@@ -253,16 +251,22 @@ const CommitSpiral = ({ config, children }) => {
     const svgEl = d3.select(svgRef.current);
     svgEl.selectAll("*").remove(); // Clear svg content before adding new elements 
     var svg = svgEl.append("g")
-      .attr("transform", "translate(" + svgWidth / 2 + "," + svgHeight / 2 + ")");
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 
     drawSpiral(svg, config, commits.counts);
   }, [commits]);
 
+  useEffect(async () => {
+    const svgEl = d3.select(svgRef.current);
+    svgEl.attr("width", width)
+        .attr("height", height);
+  }, [width, height]);
+
   return (
     <svg ref={svgRef}
-      width={svgWidth}
-      height={svgHeight} />
+      width={width || 400}
+      height={height || 400} />
   );
 }
 
