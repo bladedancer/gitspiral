@@ -9,7 +9,6 @@ const CommitSource = ({ children }) => {
         const response = await fetch(`/api/data?repo=${commits.repo}&folder=${commits.folder}`);
         // TODO error handling
         
-        console.log(response);
         // Fill in the gaps
         let counts = await response.json();
 

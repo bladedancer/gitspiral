@@ -8,7 +8,8 @@ const App = () => {
         //repo: "/home/gavin/github/apiserver-viz-v2",
         //repo: "/home/gavin/github/envoy",
         repo: "/home/gavin/work/vordel",
-        folder: "src/native",
+        //folder: "src/native",
+        folder: ".",
         counts: {}
     });
     const context = useMemo(() => ({ commits, setCommits }), [commits]);
@@ -16,7 +17,7 @@ const App = () => {
     return (
         <CommitsProvider value={context}>
             <CommitSource></CommitSource>
-            <CommitSpiral config={{width: 8000, height: 8000, 
+            <CommitSpiral config={{width: 4000, height: 4000, 
                 margin: {top: 10, right: 10, bottom: 10, left: 10}}}>
 
             </CommitSpiral>
