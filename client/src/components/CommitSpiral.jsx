@@ -9,10 +9,11 @@ const defaults = {
     startingRadius: 40,
     spacing: 10,
     angleIncrementDeg: 5,
-    barWidth: 5
+    barWidth: 5,
+    commitMax: 30 // Max out the bars at 30
 }
 
-function drawSpiral(svg, {barWidth, spacing, angleIncrementDeg, startingRadius}, counts) {
+function drawSpiral(svg, {barWidth, spacing, startingRadius, commitMax}, counts) {
     const numPoints = Object.keys(counts).length;
 
     // Evenly spaced points along spiral
@@ -42,7 +43,7 @@ function drawSpiral(svg, {barWidth, spacing, angleIncrementDeg, startingRadius},
       
     // yScale for the bar height
     let yScale = d3.scaleLinear()
-        .domain([0, d3.max(countArray, (k) => k.value)])
+        .domain([0, d3.max(countArray, (k) => Math.min(k.value, commitMax))])
         .range([0, spacing*5]); // TODO: Figure out spiral spacing.
 
     
@@ -70,7 +71,7 @@ function drawSpiral(svg, {barWidth, spacing, angleIncrementDeg, startingRadius},
       .attr("class", "bar")
       .attr("y", d => d.y)
       .attr("width", d => barWidth)
-      .attr("height", d => yScale(d.value))
+      .attr("height", d => yScale(Math.min(d.value, commitMax)))
       .style("fill", "steelblue")
       .style("stroke", "none")
       .attr("transform", d => {

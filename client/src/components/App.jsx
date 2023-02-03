@@ -6,8 +6,9 @@ import { CommitsProvider } from './hooks/useCommits.js';
 const App = () => {
     const [commits, setCommits] = useState({
         //repo: "/home/gavin/github/apiserver-viz-v2",
-        repo: "/home/gavin/github/envoy",
-        folder: ".",
+        //repo: "/home/gavin/github/envoy",
+        repo: "/home/gavin/work/vordel",
+        folder: "src/native",
         counts: {}
     });
     const context = useMemo(() => ({ commits, setCommits }), [commits]);
@@ -15,7 +16,7 @@ const App = () => {
     return (
         <CommitsProvider value={context}>
             <CommitSource></CommitSource>
-            <CommitSpiral config={{width: 800, height: 800, 
+            <CommitSpiral config={{width: 8000, height: 8000, 
                 margin: {top: 10, right: 10, bottom: 10, left: 10}}}>
 
             </CommitSpiral>
