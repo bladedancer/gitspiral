@@ -31,7 +31,7 @@ api.get('/data', async (req, res) => {
             .send({"error": `not found (${folder})`});
     }
 
-    let repo = new git.Git({gitDir: "/home/gavin/github/apiserver-viz-v2/.git"})
+    let repo = new git.Git({gitDir: gitRepo})
     let commitDates = (await repo.log("--date=short", "--pretty=format:%ad", "--", folder)).split(/\r?\n/);
 
     let counts = commitDates.reduce((acc, cur) => {

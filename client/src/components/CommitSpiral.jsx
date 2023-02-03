@@ -1,24 +1,23 @@
 import React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
 import * as d3 from "d3";
 import { useCommitsContext } from "./hooks/useCommits";
-import './commitspiral.css';
 
 const defaults = {
     width: 400,
     height: 400,
     margin: 40,
     startingRadius: 40,
-    radiusIncrement: 0.75,
+    spacing: 10,
     angleIncrementDeg: 5,
     barWidth: 5
 }
 
-function drawSpiral(svg, {barWidth, radiusIncrement, angleIncrementDeg, startingRadius}, counts) {
+function drawSpiral(svg, {barWidth, spacing, angleIncrementDeg, startingRadius}, counts) {
     const numPoints = Object.keys(counts).length;
-    const radius = (r, i) => startingRadius + (i * radiusIncrement);      
-    const theta = (r, i) => {
-        return (angleIncrementDeg * Math.PI * 2 / 360) * i;
-    };
+
+    // Evenly spaced points along spiral
+    const radius = (r, i) => startingRadius + (Math.sqrt(i + 1) * spacing);      
+    const theta = (r, i) => i * Math.asin(1/Math.sqrt(i + 2));
 
     // append our rects
     let countArray = Object.keys(counts).sort().reduce((acc, cur) => {
@@ -44,7 +43,7 @@ function drawSpiral(svg, {barWidth, radiusIncrement, angleIncrementDeg, starting
     // yScale for the bar height
     let yScale = d3.scaleLinear()
         .domain([0, d3.max(countArray, (k) => k.value)])
-        .range([0, (360 / angleIncrementDeg) * radiusIncrement * 0.5]); // Might be wrong - max is half the width of the spiral ring
+        .range([0, spacing*5]); // TODO: Figure out spiral spacing.
 
     
     const spiralLength = path.node().getTotalLength();

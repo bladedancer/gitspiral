@@ -5,7 +5,8 @@ import { CommitsProvider } from './hooks/useCommits.js';
 
 const App = () => {
     const [commits, setCommits] = useState({
-        repo: "/home/gavin/github/apiserver-viz-v2",
+        //repo: "/home/gavin/github/apiserver-viz-v2",
+        repo: "/home/gavin/github/envoy",
         folder: ".",
         counts: {}
     });
@@ -14,7 +15,7 @@ const App = () => {
     return (
         <CommitsProvider value={context}>
             <CommitSource></CommitSource>
-            <CommitSpiral config={{width: 400, height: 400, 
+            <CommitSpiral config={{width: 800, height: 800, 
                 margin: {top: 10, right: 10, bottom: 10, left: 10}}}>
 
             </CommitSpiral>
