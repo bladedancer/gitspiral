@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import * as d3 from "d3";
 
 import { FiZoomIn, FiZoomOut, FiMaximize } from "react-icons/fi";
 
@@ -33,41 +34,37 @@ const ZoomControl = ({
   };
 
   const zoomIn = useCallback(() => {
-    // cy.animate({
-    //   zoom: {
-    //     level: cy.zoom() * 1.2,
-    //     renderedPosition: {
-    //       x: window.innerWidth / 2,
-    //       y: window.innerHeight / 2,
-    //     }
-    //   }
-    // }, {
-    //   duration
-    // });
+    const svgEl = d3.select("svg.spiral").node();
+    const bbox = svgEl.getBBox();
+
+    const {x, y, width, height} = svgEl.viewBox.baseVal;
+    const scaledWidth = width * 0.9;
+    const scaledHeight = height * 0.9;
+    const offsetX = x + ((width - scaledWidth) / 2);
+    const offsetY = y + ((height - scaledHeight) / 2);
+
+    svgEl.setAttribute("viewBox", `${offsetX} ${offsetY} ${scaledWidth} ${scaledHeight}`);
   }, []);
 
   const zoomOut = useCallback(() => {
-    // cy.animate({
-    //   zoom: {
-    //     level: cy.zoom() * 0.8,
-    //     renderedPosition: {
-    //       x: window.innerWidth / 2,
-    //       y: window.innerHeight / 2,
-    //     }
-    //   }
-    // }, {
-    //   duration
-    // });
+    const svgEl = d3.select("svg.spiral").node();
+    const bbox = svgEl.getBBox();
+
+    const {x, y, width, height} = svgEl.viewBox.baseVal;
+    const scaledWidth = width * 1.111;
+    const scaledHeight = height * 1.111;
+    const offsetX = x + ((width - scaledWidth) / 2);
+    const offsetY = y + ((height - scaledHeight) / 2);
+
+    svgEl.setAttribute("viewBox", `${offsetX} ${offsetY} ${scaledWidth} ${scaledHeight}`);
   }, []);
 
   const fit = useCallback(() => {
-    // cy.animate({
-    //   fit: {
-    //     eles: cy.nodes()
-    //   }
-    // }, {
-    //   duration
-    // });
+
+    d3.select("svg.spiral");
+        const svgEl = d3.select("svg.spiral").node();
+        const bbox = svgEl.getBBox();
+        svgEl.setAttribute("viewBox", `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
   }, []);
 
   return (

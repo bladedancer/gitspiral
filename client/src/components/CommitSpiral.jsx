@@ -265,6 +265,8 @@ const CommitSpiral = ({ config, children }) => {
 
   return (
     <svg ref={svgRef}
+      className="spiral"
+      viewBox={`${0} ${0} ${width || 400} ${height || 400}`}
       width={width || 400}
       height={height || 400} />
   );
