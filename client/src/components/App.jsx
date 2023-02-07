@@ -7,11 +7,11 @@ import ControlsContainer from './controls/ControlsContainer.jsx';
 
 const App = () => {
     const [commits, setCommits] = useState({
-        repo: "/home/gavin/github/apiserver-viz-v2",
+        //repo: "/home/gavin/work/api-server",
         //repo: "/home/gavin/github/envoy",
-        //repo: "/home/gavin/work/vordel",
+        repo: "/home/gavin/work/vordel",
         //folder: "src/native",
-        folder: ".",
+        folder: "",
         counts: {}
     });
     const context = useMemo(() => ({ commits, setCommits }), [commits]);

@@ -32,7 +32,12 @@ api.get('/data', async (req, res) => {
     }
 
     let repo = new git.Git({gitDir: gitRepo})
-    let commitDates = (await repo.log("--date=short", "--pretty=format:%ad", "--", folder)).split(/\r?\n/);
+    let commitDates = [];
+    if (!folder) {
+        commitDates = (await repo.log("--date=short", "--pretty=format:%ad", "--", folder)).split(/\r?\n/);
+    } else {
+        commitDates = (await repo.log("--date=short", "--pretty=format:%ad")).split(/\r?\n/);
+    }
 
     let counts = commitDates.reduce((acc, cur) => {
         acc[cur] = (acc[cur] || 0) + 1;
