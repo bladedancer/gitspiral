@@ -11,7 +11,7 @@ const defaults = {
   spacing: 10,
   angleIncrementDeg: 5,
   barWidth: 5,
-  limit: 30 // Max out the bars at 30
+  limit: 40 // Limit the bars 
 }
 
 function drawSpiral(svg, { barWidth, spacing, startingRadius, limit }, counts) {

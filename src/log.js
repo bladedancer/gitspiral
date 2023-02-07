@@ -2,7 +2,7 @@ import snooplogg from 'snooplogg';
 
 const { chalk } = snooplogg;
 
-const log = snooplogg
+const log = snooplogg.stdio
   .config({
     inspectOptions: {
       colors: true,

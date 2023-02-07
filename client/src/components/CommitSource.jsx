@@ -6,7 +6,7 @@ const CommitSource = ({ children }) => {
 
     // Load Commits
     useEffect(async () => {
-        const response = await fetch(`/api/data?repo=${commits.repo}&folder=${commits.folder}`);
+        const response = await fetch(`/api/data?repo=${commits.repo}&folder=${commits.folder}&all=${commits.all ? "true" : "false"}`);
         // TODO error handling
         
         // Fill in the gaps

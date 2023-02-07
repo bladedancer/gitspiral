@@ -12,6 +12,7 @@ const App = () => {
         repo: "/home/gavin/work/vordel",
         //folder: "src/native",
         folder: "",
+        all: true,
         counts: {}
     });
     const context = useMemo(() => ({ commits, setCommits }), [commits]);
