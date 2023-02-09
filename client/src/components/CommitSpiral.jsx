@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
 import * as d3 from "d3";
 import { useCommitsContext } from "./hooks/useCommits";
-import useWindowDimensions from './hooks/useWindowDimensions';
+import { useLayoutContext } from './hooks/useLayout';
 
 const defaults = {
   width: 400,
@@ -236,9 +236,8 @@ function drawTimeStamps(svg, path, countArray) {
 
 const CommitSpiral = ({ config, children }) => {
   const svgRef = useRef(null);
-  const [counts, setCounts] = useState({});
   const { commits, setCommits } = useCommitsContext();
-  const { width, height } = useWindowDimensions();
+  const { layout, setLayout } = useLayoutContext();
 
   config = {
     ...defaults,
@@ -246,29 +245,38 @@ const CommitSpiral = ({ config, children }) => {
   }
 
   useEffect(async () => {
-    setCounts(commits.counts);
-
     const svgEl = d3.select(svgRef.current);
     svgEl.selectAll("*").remove(); // Clear svg content before adding new elements 
     var svg = svgEl.append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+      .attr("transform", "translate(" + layout.center.x + "," + layout.center.y + ")");
 
 
     drawSpiral(svg, config, commits.counts);
   }, [commits]);
 
   useEffect(async () => {
+    console.log(layout);
     const svgEl = d3.select(svgRef.current);
-    svgEl.attr("width", width)
-        .attr("height", height);
-  }, [width, height]);
+
+    const scaledWidth = layout.width * layout.zoom;
+    const scaledHeight = layout.height * layout.zoom;
+    const offsetX = ((layout.width - scaledWidth) / 2);
+    const offsetY = ((layout.height - scaledHeight) / 2);
+
+    svgEl.attr("width", layout.width)
+        .attr("height", layout.height)
+        .attr("viewBox", `${offsetX} ${offsetY} ${scaledWidth} ${scaledHeight}`);
+    
+    svgEl.select("g")
+      .attr("transform", "translate(" + layout.center.x + "," + layout.center.y + ")");
+  }, [layout]);
 
   return (
     <svg ref={svgRef}
       className="spiral"
-      viewBox={`${0} ${0} ${width || 400} ${height || 400}`}
-      width={width || 400}
-      height={height || 400} />
+      viewBox={`${0} ${0} ${layout.width} ${layout.height}`}
+      width={layout.width}
+      height={layout.height} />
   );
 }
 
