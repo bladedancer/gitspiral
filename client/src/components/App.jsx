@@ -5,15 +5,11 @@ import { CommitsProvider } from './hooks/useCommits.js';
 import LayoutControl from './controls/LayoutControl.jsx';
 import ControlsContainer from './controls/ControlsContainer.jsx';
 import { LayoutProvider } from './hooks/useLayout.js';
+import RepoControl from './controls/RepoControl.jsx';
+import { RepoProvider } from './hooks/useRepo.js';
 
 const App = () => {
     const [commits, setCommits] = useState({
-        //repo: "/home/gavin/work/api-server",
-        //repo: "/home/gavin/github/envoy",
-        repo: "/home/gavin/github/apiserver-viz-v2",
-        //folder: "src/native",
-        folder: "",
-        all: true,
         counts: {}
     });
 
@@ -28,18 +24,31 @@ const App = () => {
         zoom: 1
     });
 
+    const [repo, setRepo] = useState({
+        repo: "",
+        folder: "",
+        all: false,
+    });
+
     const context = useMemo(() => ({ commits, setCommits }), [commits]);
     const layoutContext = useMemo(() => ({ layout, setLayout }), [layout]);
+    const repoContext = useMemo(() => ({ repo, setRepo }), [repo]);
 
     return (
         <LayoutProvider value={layoutContext}>
-            <CommitsProvider value={context}>
-                <CommitSource />
-                <CommitSpiral />
-                <ControlsContainer position={"bottom-right"}>
-                    <LayoutControl />
-                </ControlsContainer>
-            </CommitsProvider>
+            <RepoProvider value={repoContext}>
+                <CommitsProvider value={context}>
+                    <CommitSource />
+                    <CommitSpiral />
+
+                    <ControlsContainer position={"top-left"}>
+                        <RepoControl />
+                    </ControlsContainer>
+                    <ControlsContainer position={"bottom-right"}>
+                        <LayoutControl />
+                    </ControlsContainer>
+                </CommitsProvider>
+            </RepoProvider>
         </LayoutProvider>
   );
 }

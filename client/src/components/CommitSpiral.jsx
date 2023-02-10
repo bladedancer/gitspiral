@@ -250,12 +250,12 @@ const CommitSpiral = ({ config, children }) => {
     var svg = svgEl.append("g")
       .attr("transform", "translate(" + layout.center.x + "," + layout.center.y + ")");
 
-
-    drawSpiral(svg, config, commits.counts);
+    if (Object.keys(commits.counts).length) {
+      drawSpiral(svg, config, commits.counts);
+    }
   }, [commits]);
 
   useEffect(async () => {
-    console.log(layout);
     const svgEl = d3.select(svgRef.current);
 
     const scaledWidth = layout.width * layout.zoom;
