@@ -95,13 +95,13 @@ function svgString2Image(svgString, bbox, format, callback) {
 
     var image = new Image();
     image.onload = function () {
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.clearRect(0, 0, bbox.width, bbox.height);
         context.drawImage(image, bbox.x, bbox.y, bbox.width, bbox.height,
             0, 0, bbox.width, bbox.height);
 
         canvas.toBlob((blob) => {
             var filesize = Math.round(blob.length / 1024) + ' KB';
-            if (callback) callback(blob, filesize);
+            callback && callback(blob, filesize);
         });
     };
 
@@ -123,7 +123,9 @@ const ExportControl = () => {
         setBusy(true);
 
         const svg = d3.select('svg.spiral').node();
-        const bbox = svg.getBBox(); 
+        const bbox = svg.getBBox();
+        svg.setAttribute("viewBox", `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+
         var svgString = getSVGString(svg);
         svgString2Image( svgString, bbox, 'png', save ); // passes Blob and filesize String to the callback
     
@@ -131,8 +133,12 @@ const ExportControl = () => {
             saveAs( dataBlob, 'commits.png' ); // FileSaver.js function
         }
 
+        // Trigger re-layout after above resizings
+        setLayout({
+            ...layoutRef.current
+        })
         setBusy(false);
-    }, [setBusy]);
+    }, [setLayout, setBusy]);
 
     return (
         <>
