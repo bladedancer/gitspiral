@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import CommitSpiral from "./CommitSpiral.jsx";
+import SpiralCanvas from "./SpiralCanvas.jsx";
 import CommitSource from "./CommitSource.jsx";
 import { CommitsProvider } from "./hooks/useCommits.js";
 import LayoutControl from "./controls/LayoutControl.jsx";
@@ -12,13 +12,14 @@ import { LayoutEventProvider } from "./hooks/useLayoutEventContext.js";
 const App = () => {
   const [commits, setCommits] = useState({
     counts: {},
+    chart: {}
   });
   const context = useMemo(() => ({ commits, setCommits }), [commits]);
 
   const [repo, setRepo] = useState({
     repo: "",
     folder: "",
-    all: false,
+    all: false
   });
   const repoContext = useMemo(() => ({ repo, setRepo }), [repo]);
 
@@ -31,7 +32,7 @@ const App = () => {
       <RepoProvider value={repoContext}>
         <CommitsProvider value={context}>
           <CommitSource />
-          <CommitSpiral />
+          <SpiralCanvas />
 
           <ControlsContainer position={"top-left"}>
             <RepoControl />

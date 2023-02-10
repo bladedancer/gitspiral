@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from 'rea
 
 export const CommitsContext = createContext({
     commits: {},
+    chart: {},
     setCommits: () => {}
 });
 

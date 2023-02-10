@@ -2,15 +2,7 @@ import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { useCommitsContext } from "./hooks/useCommits";
 import { useLayoutEventContext } from "./hooks/useLayoutEventContext";
-import './commitspiral.css';
-
-const defaults = {
-  startingRadius: 40,
-  spacing: 10,
-  angleIncrementDeg: 5,
-  barWidth: 5,
-  limit: 40, // Limit the bars
-};
+import "./spiralcanvas.css";
 
 // Below are the functions that handle actual exporting:
 // getSVGString ( svgNode ) and svgString2Image( svgString, width, height, format )
@@ -122,20 +114,20 @@ function svgString2Image(svgString, bbox, format, callback) {
   return contentPromise;
 }
 
-function drawSpiral(svg, { barWidth, spacing, startingRadius, limit }, counts) {
-  const numPoints = Object.keys(counts).length;
+function drawSpiral(svg, commits) {
+  const numPoints = Object.keys(commits.counts).length;
 
   // Evenly spaced points along spiral
-  const radius = (r, i) => startingRadius + Math.sqrt(i + 1) * spacing;
+  const radius = (r, i) => commits.chart.startingRadius + Math.sqrt(i + 1) * commits.chart.spacing;
   const theta = (r, i) => i * Math.asin(1 / Math.sqrt(i + 2));
 
   // append our rects
-  let countArray = Object.keys(counts)
+  let countArray = Object.keys(commits.counts)
     .sort()
     .reduce((acc, cur) => {
       acc.push({
         key: cur,
-        value: counts[cur],
+        value: commits.counts[cur],
       });
       return acc;
     }, []);
@@ -154,10 +146,15 @@ function drawSpiral(svg, { barWidth, spacing, startingRadius, limit }, counts) {
     .style("fill", "none")
     .style("stroke", "steelblue");
 
-  drawBars(svg, path, countArray, { limit, spacing, barWidth });
-  //drawHeatBars(svg, path, countArray, { limit, spacing, barWidth });
-  //drawCircles(svg, path, countArray, {limit, maxRadius: 10});
-  //drawHeatCircles(svg, path, countArray, {limit, minRadius: 10, maxRadius: 10});
+  if (commits.chart.type === "bar") {
+    drawBars(svg, path, countArray, commits.chart);
+  } else if (commits.chart.type === "heatbar") {
+    drawHeatBars(svg, path, countArray, commits.chart);
+  } else if (commits.chart.type === "circle") {
+    drawCircles(svg, path, countArray, commits.chart);
+  } else if (commits.chart.type === "heatcircle") {
+    drawHeatCircles(svg, path, countArray, commits.chart);
+  }
   drawTimeStamps(svg, path, countArray);
 }
 
@@ -363,7 +360,7 @@ function drawTimeStamps(svg, path, countArray) {
     .attr("startOffset", (d) => (d.distAlongSpiral / spiralLength) * 100 + "%");
 }
 
-const CommitSpiral = ({ config, children }) => {
+const SpiralCanvas = ({ children }) => {
   const svgRef = useRef(null);
   const { commits, setCommits } = useCommitsContext();
   const { innerWidth: width, innerHeight: height } = window;
@@ -437,11 +434,6 @@ const CommitSpiral = ({ config, children }) => {
     });
   }, [svgRef]);
 
-  config = {
-    ...defaults,
-    ...config,
-  };
-
   // Draw the spiral
   useEffect(async () => {
     const svgEl = d3.select(svgRef.current);
@@ -454,7 +446,7 @@ const CommitSpiral = ({ config, children }) => {
       );
 
     if (Object.keys(commits.counts).length) {
-      drawSpiral(svg, config, commits.counts);
+      drawSpiral(svg, commits);
     }
   }, [commits]);
 
@@ -491,4 +483,4 @@ const CommitSpiral = ({ config, children }) => {
   );
 };
 
-export default CommitSpiral;
+export default SpiralCanvas;

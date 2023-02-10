@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import { FiMaximize, FiBarChart2, FiGitCommit, FiThermometer, FiZoomIn, FiZoomOut } from "react-icons/fi";
+import { useCommitsContext } from "../hooks/useCommits";
 import { useLayoutEventContext } from "../hooks/useLayoutEventContext";
+import "./layoutcontrol.css"
 
 /**
  * The `LayoutControl` create  UI buttons that allows the user to
@@ -23,8 +25,12 @@ const LayoutControl = ({
   style,
   children,
 }) => {
+  const { commits, setCommits } = useCommitsContext();
+  const commitsRef = useRef(commits);
+
   const { layoutEvent, setLayoutEvent } = useLayoutEventContext();
   const layout = useRef(layoutEvent);
+  const [heat, setHeat] = useState(false);
 
   // Common html props for the div wrapper
   const htmlProps = {
@@ -36,6 +42,10 @@ const LayoutControl = ({
   useEffect(() => {
     layout.current = layoutEvent;
   }, [layoutEvent]);
+
+  useEffect(() => {
+    commitsRef.current = commits;
+  }, [commits]);
 
   // Window resize events
   useEffect(() => {
@@ -90,21 +100,54 @@ const LayoutControl = ({
     };
   }, []);
 
+  const setChart = useCallback((heat, type) => {
+    let chart = {
+      startingRadius: 40,
+      spacing: 10,
+      limit: 40
+    };
+
+    if (type === "circle") {
+      chart = {
+        ...chart,
+        type: heat ? "heatcircle" : "circle", 
+        maxRadius: 10,
+        minRadius: heat ? 10 : 0,
+        heat
+      };
+    } else {
+      chart = {
+        ...chart,
+        type: heat ? "heatbar" : "bar", 
+        barWidth: 5,
+        heat
+      };
+    } 
+
+    setCommits({
+      ...commits,
+      chart
+    });
+  }, [commits]);
+
+  useEffect(() => {
+    setChart(heat, commits.chart.type);
+  }, [heat]);
 
   return (
     <>
       <div {...htmlProps}>
-        <button onClick={()=>{}} title="Bar Chart">
+        <button onClick={()=>{setChart(heat, "bar")}} title="Bar Chart">
           {children ? children[0] : <FiBarChart2 style={{ width: "1em" }} />}
         </button>
       </div>
       <div {...htmlProps}>
-        <button onClick={()=>{}} title="Circle Chart">
+        <button onClick={()=>{setChart(heat, "circle")}} title="Circle Chart">
           {children ? children[0] : <FiGitCommit style={{ width: "1em" }} />}
         </button>
       </div>
       <div {...htmlProps}>
-        <button onClick={()=>{}} title="Heat map">
+        <button onClick={()=>{setHeat(!heat)}} title="Heat map" className={`heat ${heat ? "checked" : ""}`}>
           {children ? children[0] : <FiThermometer style={{ width: "1em" }} />}
         </button>
       </div>
