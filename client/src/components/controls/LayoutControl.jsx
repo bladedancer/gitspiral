@@ -24,7 +24,7 @@ const LayoutControl = ({
   children,
 }) => {
   const { layout, setLayout } = useLayoutContext();
-  const layoutRef = useRef(layout)
+  const layoutRef = useRef(layout);
 
 
   // Common html props for the div wrapper

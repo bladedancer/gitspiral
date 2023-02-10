@@ -7,6 +7,7 @@ import ControlsContainer from './controls/ControlsContainer.jsx';
 import { LayoutProvider } from './hooks/useLayout.js';
 import RepoControl from './controls/RepoControl.jsx';
 import { RepoProvider } from './hooks/useRepo.js';
+import ExportControl from './controls/ExportControl.jsx';
 
 const App = () => {
     const [commits, setCommits] = useState({
@@ -43,6 +44,7 @@ const App = () => {
 
                     <ControlsContainer position={"top-left"}>
                         <RepoControl />
+                        <ExportControl />
                     </ControlsContainer>
                     <ControlsContainer position={"bottom-right"}>
                         <LayoutControl />

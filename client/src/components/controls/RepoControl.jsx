@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useRepoContext } from "../hooks/useRepo";
+import Toggle from "../utils/Toggle.jsx";
+import './repocontrol.css';
 
 /**
  * The `RepoControl` create input for the repo selection
@@ -24,7 +26,7 @@ const RepoControl = ({
   // Common html props for the div wrapper
   const htmlProps = {
     style,
-    className: `react-control ${className || ""}`,
+    className: `repo-control ${className || ""}`,
   };
 
   const setProjectFolder = useCallback((f) => {
@@ -34,25 +36,37 @@ const RepoControl = ({
     });
   }, [repo, setRepo])
 
-  const setProjectSubFolder = useCallback((f) => {
+  const setProjectSubFolder = useCallback((e) => {
     setRepo({
         ...repo,
-        folder: f.target.value
+        folder: e.target.value
+    });
+  }, [repo, setRepo])
+
+  const toggleAllBranches = useCallback((f) => {
+    setRepo({
+        ...repo,
+        all: !repo.all
     });
   }, [repo, setRepo])
 
   return (
     <>
       <div {...htmlProps}>
-        <label>
-            Git Repo Folder:
-            <input type="text" value={repo.repo} onChange={setProjectFolder} />
-        </label>
-        <label>
-            Project Folder (optional):
-            <input type="text" value={repo.folder} onChange={setProjectSubFolder} />
-        </label>
-
+        <div className="text-repo-control">
+          <label htmlFor="repo-repo-control">Git Repo Folder:</label>
+          <input id="repo-repo-control" type="text" value={repo.repo} onChange={setProjectFolder} placeholder="Enter root project folder"/>
+        </div>
+        <div className="text-repo-control">
+          <label htmlFor="folder-repo-control">Project Folder:</label>
+          <input id="folder-repo-control" type="text" value={repo.folder} onChange={setProjectSubFolder} placeholder="Enter sub-folder (optional)"/>
+        </div>
+        <Toggle className="branches-repo-control"
+            checked={repo.all}
+            onChange={toggleAllBranches}
+          >
+            All Branches
+        </Toggle>
       </div>
     </>
   );
