@@ -1,58 +1,49 @@
-import React, { useState, useMemo } from 'react';
-import CommitSpiral from './CommitSpiral.jsx';
-import CommitSource from './CommitSource.jsx';
-import { CommitsProvider } from './hooks/useCommits.js';
-import LayoutControl from './controls/LayoutControl.jsx';
-import ControlsContainer from './controls/ControlsContainer.jsx';
-import { LayoutProvider } from './hooks/useLayout.js';
-import RepoControl from './controls/RepoControl.jsx';
-import { RepoProvider } from './hooks/useRepo.js';
-import ExportControl from './controls/ExportControl.jsx';
+import React, { useState, useMemo } from "react";
+import CommitSpiral from "./CommitSpiral.jsx";
+import CommitSource from "./CommitSource.jsx";
+import { CommitsProvider } from "./hooks/useCommits.js";
+import LayoutControl from "./controls/LayoutControl.jsx";
+import ControlsContainer from "./controls/ControlsContainer.jsx";
+import RepoControl from "./controls/RepoControl.jsx";
+import { RepoProvider } from "./hooks/useRepo.js";
+import ExportControl from "./controls/ExportControl.jsx";
+import { LayoutEventProvider } from "./hooks/useLayoutEventContext.js";
 
 const App = () => {
-    const [commits, setCommits] = useState({
-        counts: {}
-    });
+  const [commits, setCommits] = useState({
+    counts: {},
+  });
+  const context = useMemo(() => ({ commits, setCommits }), [commits]);
 
-    const { innerWidth: width, innerHeight: height } = window;
-    const [layout, setLayout] = useState({
-        width,
-        height,
-        center: {
-          x: width / 2,
-          y: height / 2
-        },
-        zoom: 1
-    });
+  const [repo, setRepo] = useState({
+    repo: "",
+    folder: "",
+    all: false,
+  });
+  const repoContext = useMemo(() => ({ repo, setRepo }), [repo]);
 
-    const [repo, setRepo] = useState({
-        repo: "",
-        folder: "",
-        all: false,
-    });
+  const [layoutEvent, setLayoutEvent] = useState();
+  const layoutEventContext = useMemo(() => ({ layoutEvent, setLayoutEvent }), [layoutEvent]);
 
-    const context = useMemo(() => ({ commits, setCommits }), [commits]);
-    const layoutContext = useMemo(() => ({ layout, setLayout }), [layout]);
-    const repoContext = useMemo(() => ({ repo, setRepo }), [repo]);
 
-    return (
-        <LayoutProvider value={layoutContext}>
-            <RepoProvider value={repoContext}>
-                <CommitsProvider value={context}>
-                    <CommitSource />
-                    <CommitSpiral />
+  return (
+    <LayoutEventProvider value={layoutEventContext}>
+      <RepoProvider value={repoContext}>
+        <CommitsProvider value={context}>
+          <CommitSource />
+          <CommitSpiral />
 
-                    <ControlsContainer position={"top-left"}>
-                        <RepoControl />
-                        <ExportControl />
-                    </ControlsContainer>
-                    <ControlsContainer position={"bottom-right"}>
-                        <LayoutControl />
-                    </ControlsContainer>
-                </CommitsProvider>
-            </RepoProvider>
-        </LayoutProvider>
+          <ControlsContainer position={"top-left"}>
+            <RepoControl />
+            <ExportControl />
+          </ControlsContainer>
+          <ControlsContainer position={"bottom-right"}>
+            <LayoutControl />
+          </ControlsContainer>
+        </CommitsProvider>
+      </RepoProvider>
+    </LayoutEventProvider>
   );
-}
+};
 
 export default App;

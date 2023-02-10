@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 
-import { FiBarChart2, FiGitCommit, FiThermometer, FiZoomIn, FiZoomOut } from "react-icons/fi";
-import { useLayoutContext } from "../hooks/useLayout";
+import { FiMaximize, FiBarChart2, FiGitCommit, FiThermometer, FiZoomIn, FiZoomOut } from "react-icons/fi";
+import { useLayoutEventContext } from "../hooks/useLayoutEventContext";
 
 /**
  * The `LayoutControl` create  UI buttons that allows the user to
@@ -23,9 +23,8 @@ const LayoutControl = ({
   style,
   children,
 }) => {
-  const { layout, setLayout } = useLayoutContext();
-  const layoutRef = useRef(layout);
-
+  const { layoutEvent, setLayoutEvent } = useLayoutEventContext();
+  const layout = useRef(layoutEvent);
 
   // Common html props for the div wrapper
   const htmlProps = {
@@ -33,43 +32,21 @@ const LayoutControl = ({
     className: `react-control ${className || ""}`,
   };
 
-  const zoomOut = useCallback(() => {
-    const zoom = Math.min(layout.zoom + 0.1, 2);
-    setLayout({
-      ...layout,
-      zoom
-    });
-  }, [layout]);
-
-  const zoomIn = useCallback(() => {
-    const zoom = Math.max(layout.zoom - 0.1, 0.1);
-    setLayout({
-      ...layout,
-      zoom
-    });
-  }, [layout]);
-
-
-
-  // Update layout ref for the events.
+  // Window resize events
   useEffect(() => {
-    layoutRef.current = layout;
-  }, [layout]);
+    layout.current = layoutEvent;
+  }, [layoutEvent]);
 
   // Window resize events
   useEffect(() => {
     function handleResize() {
       const { innerWidth: width, innerHeight: height } = window;
-      setLayout({
-        ...layoutRef.current,
-        width,
-        height
-      });
+      layout.current && layout.current.resize(width, height);
     }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [setLayoutEvent]);
 
   
   // Mouse events for canvas dragging
@@ -95,13 +72,7 @@ const LayoutControl = ({
           y: e.screenY
         }
 
-        setLayout({
-          ...layoutRef.current,
-          center: {
-            x: layoutRef.current.center.x + delta.x,
-            y: layoutRef.current.center.y + delta.y,
-          }
-        })
+        layout.current && layout.current.move(delta.x, delta.y);
       }
     }
 
@@ -138,13 +109,18 @@ const LayoutControl = ({
         </button>
       </div>
       <div {...htmlProps}>
-        <button onClick={zoomIn} title="Zoom In">
+        <button onClick={layout.current && layout.current.zoomIn} title="Zoom In">
           {children ? children[0] : <FiZoomIn style={{ width: "1em" }} />}
         </button>
       </div> 
       <div {...htmlProps}>
-        <button onClick={zoomOut} title="Zoom Out">
+        <button onClick={layout.current && layout.current.zoomOut} title="Zoom Out">
           {children ? children[1] : <FiZoomOut style={{ width: "1em" }} />}
+        </button>
+      </div>
+      <div {...htmlProps}>
+        <button onClick={layout.current && layout.current.fit} title="See whole graph">
+          {children ? children[4] : <FiMaximize style={{ width: "1em" }} />}
         </button>
       </div>
     </>
