@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
 
-import { FiZoomIn, FiZoomOut } from "react-icons/fi";
+import { FiBarChart2, FiGitCommit, FiThermometer, FiZoomIn, FiZoomOut } from "react-icons/fi";
 import { useLayoutContext } from "../hooks/useLayout";
 
 /**
@@ -123,10 +123,25 @@ const LayoutControl = ({
   return (
     <>
       <div {...htmlProps}>
+        <button onClick={()=>{}} title="Bar Chart">
+          {children ? children[0] : <FiBarChart2 style={{ width: "1em" }} />}
+        </button>
+      </div>
+      <div {...htmlProps}>
+        <button onClick={()=>{}} title="Circle Chart">
+          {children ? children[0] : <FiGitCommit style={{ width: "1em" }} />}
+        </button>
+      </div>
+      <div {...htmlProps}>
+        <button onClick={()=>{}} title="Heat map">
+          {children ? children[0] : <FiThermometer style={{ width: "1em" }} />}
+        </button>
+      </div>
+      <div {...htmlProps}>
         <button onClick={zoomIn} title="Zoom In">
           {children ? children[0] : <FiZoomIn style={{ width: "1em" }} />}
         </button>
-      </div>
+      </div> 
       <div {...htmlProps}>
         <button onClick={zoomOut} title="Zoom Out">
           {children ? children[1] : <FiZoomOut style={{ width: "1em" }} />}
