@@ -2,6 +2,7 @@ import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { useCommitsContext } from "./hooks/useCommits";
 import { useLayoutEventContext } from "./hooks/useLayoutEventContext";
+import './commitspiral.css';
 
 const defaults = {
   startingRadius: 40,
@@ -45,6 +46,7 @@ function getSVGString(svgNode) {
           selectorTextArr.push("." + classes[c]);
     }
 
+    console.log(selectorTextArr);
     // Extract CSS Rules
     var extractedCSSText = "";
     for (var i = 0; i < document.styleSheets.length; i++) {
@@ -421,8 +423,8 @@ const CommitSpiral = ({ config, children }) => {
             y: layoutRef.current.height / 2,
           },
           zoom: Math.max(
-            bbox.width / layoutRef.current.width,
-            bbox.height / layoutRef.current.height
+            Math.ceil((bbox.width / layoutRef.current.width) * 5) / 5,
+            Math.ceil((bbox.height / layoutRef.current.height) * 5) / 5
           ),
         });
       },
