@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode } from "react";
+import React, { CSSProperties, ReactNode } from 'react';
 import './controlscontainer.css';
 
 /**
@@ -15,16 +15,20 @@ import './controlscontainer.css';
  * @category Component
  */
 const ControlsContainer = ({
-  id,
-  className,
-  style,
-  children,
-  position = "bottom-left",
+    id,
+    className,
+    style,
+    children,
+    position = 'bottom-left',
 }) => {
-  // Common html props for the container
-  const props = { className: `react-controls ${className ? className : ""} ${position}`, id, style };
+    // Common html props for the container
+    const props = {
+        className: `react-controls ${className ? className : ''} ${position}`,
+        id,
+        style,
+    };
 
-  return <div {...props}>{children}</div>;
+    return <div {...props}>{children}</div>;
 };
 
-export default ControlsContainer
+export default ControlsContainer;

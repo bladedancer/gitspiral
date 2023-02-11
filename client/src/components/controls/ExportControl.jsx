@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { saveAs } from 'file-saver';
-import { FiRefreshCw, FiDownload } from "react-icons/fi";
+import { FiRefreshCw, FiDownload } from 'react-icons/fi';
 import './exportcontrol.css';
-import { useLayoutEventContext } from "../hooks/useLayoutEventContext";
-
+import { useLayoutEventContext } from '../hooks/useLayoutEventContext';
 
 const ExportControl = () => {
     const [busy, setBusy] = useState(false);
@@ -19,7 +18,7 @@ const ExportControl = () => {
         setBusy(true);
 
         const dataBlob = await layoutEventRef.current.toImage();
-        saveAs( dataBlob, 'commits.png' ); // FileSaver.js function
+        saveAs(dataBlob, 'commits.png'); // FileSaver.js function
         setBusy(false);
     }, []);
 
@@ -33,7 +32,7 @@ const ExportControl = () => {
                 </button>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default ExportControl;

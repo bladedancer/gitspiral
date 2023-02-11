@@ -8,5 +8,5 @@ const USER_AGENT = process.env.USER_AGENT || 'graphspiral';
 
 export default {
     PORT,
-    USER_AGENT
+    USER_AGENT,
 };

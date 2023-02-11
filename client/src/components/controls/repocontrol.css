@@ -1,28 +1,28 @@
 /**
  * Repo
  */
- .repo-control {
-    border: none;
-    margin: 2vh 2px 2px 2px;
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
+.repo-control {
+   border: none;
+   margin: 2vh 2px 2px 2px;
+   display: flex;
+   flex-direction: column;
+   padding: 5px;
 }
 
 /**
  * Repo Filter
  */
- .text-repo-control {
-    display: flex;
-    flex-direction: row;
+.text-repo-control {
+   display: flex;
+   flex-direction: row;
 }
 
-.text-repo-control label{
+.text-repo-control label {
    text-align: left;
    width: 120px;
 }
 
 .text-repo-control input {
-   border:0;
+   border: 0;
    padding: 0 0 0 5px;
 }
