@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useCommitsContext } from './hooks/useCommits';
 import { useRepoContext } from './hooks/useRepo';
 
@@ -20,7 +20,7 @@ const CommitSource = ({ children }) => {
                 // TODO: Message banner
                 console.error(response);
             } else {
-                // Fill in the gaps
+                // Fill in the gaps - so that there is data for every day
                 let counts = await response.json();
 
                 if (Object.keys(counts) !== 0) {
@@ -52,9 +52,8 @@ const CommitSource = ({ children }) => {
             }
         }
         setCommits(update);
-    }, [repo, setCommits]); // TODO SEPARATE STATE
+    }, [repo, setCommits]);
 
-    // TODO - render path/folder edit controls.
     return <>{children}</>;
 };
 

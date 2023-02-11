@@ -14,7 +14,7 @@ const App = () => {
         counts: {},
         chart: {},
     });
-    const context = useMemo(() => ({ commits, setCommits }), [commits]);
+    const commitsContext = useMemo(() => ({ commits, setCommits }), [commits]);
 
     const [repo, setRepo] = useState({
         repo: '',
@@ -32,7 +32,8 @@ const App = () => {
     return (
         <LayoutEventProvider value={layoutEventContext}>
             <RepoProvider value={repoContext}>
-                <CommitsProvider value={context}>
+                <CommitsProvider value={commitsContext}>
+                    
                     <CommitSource />
                     <SpiralCanvas />
 
