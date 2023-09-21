@@ -10,6 +10,7 @@ export const RepoContext = createContext({
     repo: '',
     folder: '',
     all: false,
+    branch: ''
 });
 
 export const RepoProvider = RepoContext.Provider;

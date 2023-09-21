@@ -11,7 +11,7 @@ const CommitSource = ({ children }) => {
         const update = { ...commits };
         if (repo.repo) {
             const response = await fetch(
-                `/api/data?repo=${repo.repo}&folder=${repo.folder}&all=${
+                `/api/data?repo=${repo.repo}&folder=${repo.folder}&branch=${repo.branch}&all=${
                     repo.all ? 'true' : 'false'
                 }`
             );
@@ -19,6 +19,7 @@ const CommitSource = ({ children }) => {
             if (response.status !== 200) {
                 // TODO: Message banner
                 console.error(response);
+                console.error(await response.text());
             } else {
                 // Fill in the gaps - so that there is data for every day
                 let counts = await response.json();

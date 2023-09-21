@@ -20,6 +20,7 @@ const App = () => {
         repo: '',
         folder: '',
         all: false,
+        branch: ''
     });
     const repoContext = useMemo(() => ({ repo, setRepo }), [repo]);
 

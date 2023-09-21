@@ -55,6 +55,16 @@ const RepoControl = ({ className, style, children }) => {
         [repo, setRepo]
     );
 
+    const setBranch = useCallback(
+        (e) => {
+            setRepo({
+                ...repo,
+                branch: e.target.value,
+            });
+        },
+        [repo, setRepo]
+    );
+
     return (
         <>
             <div {...htmlProps}>
@@ -85,6 +95,19 @@ const RepoControl = ({ className, style, children }) => {
                 >
                     All Branches
                 </Toggle>
+                {
+                    !repo.all &&
+                    <div className="text-repo-control">
+                        <label htmlFor="branch-repo-control">Branch:</label>
+                        <input
+                            id="branch-repo-control"
+                            type="text"
+                            value={repo.branch}
+                            onChange={setBranch}
+                            placeholder="Enter branch (optional)"
+                        />
+                    </div>
+                }
             </div>
         </>
     );
