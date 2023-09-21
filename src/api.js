@@ -65,7 +65,16 @@ api.get('/data', async (req, res) => {
     }
 
     log.info('git log', ...gitargs);
-    let commitDates = (await repo.log(...gitargs)).split(/\r?\n/);
+    let commitDates = [];
+    
+    try {
+        commitDates = (await repo.log(...gitargs)).split(/\r?\n/);
+    } catch(e) {
+        return res
+            .status(400)
+            .append('Content-Type', 'application/json')
+            .send({ error: e });
+    }
 
     log.info(`Total Commits: ${commitDates.length}`);
 
